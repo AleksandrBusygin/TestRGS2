@@ -3,25 +3,46 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class BaseTest {
 
     public static WebDriver driver;
+    public static Properties properties = TestProperties.getInstance().getProperties();
+    protected static String baseUrl;
 
     @Before
     public void setup() {
-        System.setProperty("webdriver.chrome.driver", "drv/chromedriver.exe");
-        driver = new ChromeDriver();
+
+        switch (properties.getProperty("browser")) {
+            case "firefox":
+                System.setProperty("webdriver.gecko.driver", properties.getProperty("webdriver.gecko.driver"));
+                driver = new FirefoxDriver();
+                break;
+            case "chrome":
+                System.setProperty("webdriver.chrome.driver", properties.getProperty("webdriver.chrome.driver"));
+                driver = new ChromeDriver();
+                break;
+            case "explorer":
+                System.setProperty("webdriver.ie.driver", properties.getProperty("webdriver.ie.driver"));
+                driver = new InternetExplorerDriver();
+                break;
+            default:
+                System.setProperty("webdriver.chrome.driver", properties.getProperty("webdriver.chrome.driver"));
+                driver = new ChromeDriver();
+        }
+        baseUrl = properties.getProperty("https://www.rgs.ru");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.get("https://www.rgs.ru");
     }
 
     @AfterClass

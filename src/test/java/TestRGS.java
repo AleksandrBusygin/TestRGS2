@@ -4,8 +4,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
-import java.util.concurrent.TimeUnit;
-
 public class TestRGS extends BaseTest {
 
     @Test
@@ -34,8 +32,10 @@ public class TestRGS extends BaseTest {
 
         new Select(driver.findElement(By.name("ArrivalCountryList"))).selectByVisibleText("Испания");
 
+
         driver.findElement(By.xpath("//input[@data-test-name='FirstDepartureDate']")).click();
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+//        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        waitFieldisDisplayed(By.xpath("//input[@data-test-name='FirstDepartureDate']"));
         fillForm(By.xpath("//input[@data-test-name='FirstDepartureDate']"),setData());
 
         WebElement element3 = driver.findElement(By.xpath("//label[@class='btn btn-attention']"));
