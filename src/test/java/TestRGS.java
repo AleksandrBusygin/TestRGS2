@@ -30,27 +30,33 @@ public class TestRGS extends BaseTest {
     public boolean sport;
 
     @Test
-    public void rgs(){
+    public void rgs() throws InterruptedException {
 
         new Select(driver.findElement(By.name("ArrivalCountryList"))).selectByVisibleText(country);
 
-        driver.findElement(By.xpath("//input[@data-test-name='FirstDepartureDate']")).click();
-        waitFieldisDisplayed(By.xpath("//input[@data-test-name='FirstDepartureDate']"));
-        isElementPresented(By.xpath("//input[@data-test-name='FirstDepartureDate']"));
-        fillForm(By.xpath("//input[@data-test-name='FirstDepartureDate']"),setData());
+        WebElement elementDeparture = driver.findElement(By.xpath("//input[@data-test-name='FirstDepartureDate']"));
+        elementDeparture.click();
+        waitFieldisDisplayed(elementDeparture);
+        isElementPresented(elementDeparture);
+        fillForm(setData(),elementDeparture);
 
         WebElement element3 = driver.findElement(By.xpath("//label[@class='btn btn-attention']"));
         scrollToElement(element3);
-        click(By.xpath("//label[@class='btn btn-attention']"));
+        click(element3);
 
-        waitFieldisDisplayed(By.xpath("//input[@data-test-name='FullName']"));
-        fillForm(By.xpath("//input[@data-test-name='FullName']"),name);
-        waitFieldisDisplayed(By.xpath("//input[@data-test-name=\"BirthDate\"]"));
-        isElementPresented(By.xpath("//input[@data-test-name=\"BirthDate\"]"));
-        fillForm(By.xpath("//input[@data-test-name=\"BirthDate\"]"),date);
+        WebElement elementFullName = driver.findElement(By.xpath("//input[@data-test-name='FullName']"));
+        waitFieldisDisplayed(elementFullName);
+        fillForm(name,elementFullName);
+
+        WebElement elementBirthDate = driver.findElement(By.xpath("//input[@data-test-name=\"BirthDate\"]"));
+        waitFieldisDisplayed(elementBirthDate);
+        isElementPresented(elementBirthDate);
+        fillForm(date, elementBirthDate);
 
         WebElement element4 = driver.findElement(By.xpath("//*[contains(text(), 'активный отдых или спорт')]/ancestor::div[@class=\"calc-vzr-toggle-risk-group\"]//div[@class=\"toggle off toggle-rgs\"]"));
         scrollToElement(element4);
         activeRelax(sport,element4);
+
+        scrollToElement(driver.findElement(By.name("ArrivalCountryList")));
     }
 }

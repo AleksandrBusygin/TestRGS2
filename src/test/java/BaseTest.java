@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertEquals;
+
 public class BaseTest {
 
     public static WebDriver driver;
@@ -43,28 +45,31 @@ public class BaseTest {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
     @BeforeClass
-    public static void rgs1() {
+    public static void rgs1() throws InterruptedException {
         System.out.println("Тестовое задание для сайта РГС");
 
-        click(By.xpath("//ol/li/a[contains(text(),'Страхование')]"));
+        WebElement elementSt = driver.findElement(By.xpath("//ol/li/a[contains(text(),'Страхование')]"));
+        click(elementSt);
 
-        click(By.xpath("//*[@class='hidden-xs'][contains(text(),'Путешествия')]"));
+        WebElement elementPt = driver.findElement(By.xpath("//*[@class='hidden-xs'][contains(text(),'Путешествия')]"));
+        click(elementPt);
 
-        click(By.xpath("//*[contains(text(), 'Страхование выезжающих за')]"));
+        WebElement elementStz = driver.findElement(By.xpath("//*[contains(text(), 'Страхование выезжающих за')]"));
+        click(elementStz);
 
         WebElement element = driver.findElement(By.xpath("//a[contains(text(), 'Рассчитать')]"));
         scrollToElement(element);
-        click(By.xpath("//a[contains(text(), 'Рассчитать')]"));
+        click(element);
 
         compareText(driver.findElement(By.xpath("//div/*[contains(text(), 'Страхование выезжающих')]")).getText(),"Страхование выезжающих за рубеж");
 
         WebElement element1 = driver.findElement(By.xpath("//button/*[contains(@class, 'content-title')]"));
         scrollToElement(element1);
-        click(By.xpath("//button/*[contains(@class, 'content-title')]"));
+        click(element1);
 
-        fillForm(By.xpath("//*[@id='Countries']"),"Шенген");
-        WebElement element2 = driver.findElement(By.xpath("//*[@id='Countries']"));
-        element2.sendKeys(Keys.DOWN,Keys.ENTER);
+        WebElement elementSh = driver.findElement(By.xpath("//*[@id='Countries']"));
+        fillForm("Шенген", elementSh);
+        elementSh.sendKeys(Keys.DOWN,Keys.ENTER);
     }
 
     @AfterClass
@@ -73,9 +78,11 @@ public class BaseTest {
         scrollToElement(element5);
         checkBoxCheck(element5);
 
-        click(By.xpath("//button[@data-test-name='NextButton'][contains(text(),'Рассчитать')]"));
+        WebElement elementR = driver.findElement(By.xpath("//button[@data-test-name='NextButton'][contains(text(),'Рассчитать')]"));
+        click(elementR);
 
-        waitFieldisDisplayed(By.xpath("//div[@class='program-name'][contains(text(),'Комфорт')]"));
+        WebElement elementK = driver.findElement(By.xpath("//div[@class='program-name'][contains(text(),'Комфорт')]"));
+        waitFieldisDisplayed(elementK);
 
         WebElement element6 = driver.findElement(By.xpath("//h2[@class='step-title'][contains(text(),'Расчет')]"));
         scrollToElement(element6);
@@ -89,12 +96,20 @@ public class BaseTest {
         driver.quit();
     }
 
-    public static void fillForm(By locator, String text){
-        driver.findElement(locator).click();
-        driver.findElement(locator).clear();
-        driver.findElement(locator).sendKeys(text);
-
+        public static void fillForm(String text, WebElement element) throws InterruptedException {
+//            scrollToElement(element);
+//            element.click();
+//            element.clear();
+//            element.sendKeys(text);
+        while (!(element.getAttribute("value").equals(text))) {
+            scrollToElement(element);
+            element.click();
+            element.clear();
+            Thread.sleep(3);
+            element.sendKeys(text);
+        }
     }
+
     public static void compareText(String actual, String expected) {
         Assert.assertTrue(("Искомого текста нет: " + expected + " вместо него " + actual), actual.contains(expected));
         System.out.println("Искомый текст есть: " + expected);
@@ -114,9 +129,9 @@ public class BaseTest {
             checkbox.click();
         }
     }
-    public static void checkBoxUnCheck(WebElement checkbox){
-        if(checkbox.isSelected()){
-            checkbox.click();
+    public static void checkBoxUnCheck(){
+        if(driver.findElement(By.xpath("//div/div[@data-toggle='toggle']")).isSelected()) {
+            driver.findElement(By.xpath("//div/div[@data-toggle='toggle']")).click();
         }
     }
 
@@ -125,14 +140,14 @@ public class BaseTest {
             checkBoxCheck(webElement);
         }
         if (cl = false) {
-            checkBoxUnCheck(webElement);
+            checkBoxUnCheck();
         }
     }
 
-    public static void waitFieldisDisplayed(By locator) {
+    public static void waitFieldisDisplayed(WebElement element) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, 10);
-            wait.until((WebDriver d) -> d.findElement(locator).isDisplayed());
+            wait.until((WebDriver d) -> element.isDisplayed());
             return;
         } catch (NoSuchElementException e) {
             e.printStackTrace();
@@ -140,10 +155,10 @@ public class BaseTest {
         Assert.fail("Поле не отображено");
     }
 
-    public static boolean isElementPresented(By locator) {
+    public static boolean isElementPresented(WebElement element) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, 10);
-            wait.until((WebDriver d) -> d.findElement(locator));
+            wait.until((WebDriver d) -> element);
             return true;
         } catch (NoSuchElementException e) {
             e.printStackTrace();
@@ -151,11 +166,11 @@ public class BaseTest {
         return false;
     }
 
-    public static void click(By locator) {
-        if (!isElementPresented(locator)) {
+    public static void click(WebElement element) {
+        if (!isElementPresented(element)) {
         }
-        waitFieldisDisplayed(locator);
-        driver.findElement(locator).click();
+        waitFieldisDisplayed(element);
+        element.click();
     }
 
     public static void scrollToElement(WebElement find){
