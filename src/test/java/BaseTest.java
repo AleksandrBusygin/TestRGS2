@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
 
 public class BaseTest {
 
@@ -61,7 +60,9 @@ public class BaseTest {
         scrollToElement(element);
         click(element);
 
-        compareText(driver.findElement(By.xpath("//div/*[contains(text(), 'Страхование выезжающих')]")).getText(),"Страхование выезжающих за рубеж");
+        WebElement head = driver.findElement(By.xpath("//div[@class='page-header']/span[@class='h1']"));
+        waitFieldisDisplayed(head);
+        compareText(head.getText(),"Страхование выезжающих за рубеж");
 
         WebElement element1 = driver.findElement(By.xpath("//button/*[contains(@class, 'content-title')]"));
         scrollToElement(element1);
@@ -87,20 +88,18 @@ public class BaseTest {
         WebElement element6 = driver.findElement(By.xpath("//h2[@class='step-title'][contains(text(),'Расчет')]"));
         scrollToElement(element6);
 
-        compareText(driver.findElement(By.xpath("//span[contains(text(),'Многократные поездки')]")).getText(),"Многократные поездки в течение года");
-        compareText(driver.findElement(By.xpath("//strong[contains(text(),'Шенген')]")).getText(),"Шенген");
+        compareText(driver.findElement(By.xpath("//span/span[@class='text-bold']/parent::span")).getText(),"Многократные поездки в течение года");
+         //span[contains(text(),'Многократные поездки')]
+        compareText(driver.findElement(By.xpath("//span/strong[@data-bind='text: Name']")).getText(),"Шенген");
+        //span/strong[@data-bind='text: Name'] //strong[contains(text(),'Шенген')]
         compareText(driver.findElement(By.xpath("//strong[@data-bind=\"text: LastName() + ' ' + FirstName()\"]")).getText(),"PUTIN VOVA");
         compareText(driver.findElement(By.xpath("//strong[@data-bind=\" text: BirthDay.repr('moscowRussianDate')\"]")).getText(),"02.07.1992");
-        compareText(driver.findElement(By.xpath(" //div[@style=\"visibility: visible; opacity: 1; display: block; transform: translateX(0px);\"]//child::small[@data-bind=\"text: ko.unwrap('undefined' === typeof info ? '' : info)\"]")).getText(),"(включая активный отдых)");
+        compareText(driver.findElement(By.xpath("//div[@style=\"visibility: visible; opacity: 1; display: block; transform: translateX(0px);\"]//child::small[@data-bind=\"text: ko.unwrap('undefined' === typeof info ? '' : info)\"]")).getText(),"(включая активный отдых)");
 
         driver.quit();
     }
 
         public static void fillForm(String text, WebElement element) throws InterruptedException {
-//            scrollToElement(element);
-//            element.click();
-//            element.clear();
-//            element.sendKeys(text);
         while (!(element.getAttribute("value").equals(text))) {
             scrollToElement(element);
             element.click();
@@ -125,22 +124,22 @@ public class BaseTest {
     }
 
     public static void checkBoxCheck(WebElement checkbox){
-        if(!checkbox.isSelected()){
+        if(!(checkbox.isSelected())){
             checkbox.click();
         }
     }
-    public static void checkBoxUnCheck(){
-        if(driver.findElement(By.xpath("//div/div[@data-toggle='toggle']")).isSelected()) {
-            driver.findElement(By.xpath("//div/div[@data-toggle='toggle']")).click();
+    public static void checkBoxUnCheck(WebElement checkbox){
+        if(checkbox.isSelected()){
+            checkbox.click();
         }
     }
 
     public static void activeRelax(boolean cl, WebElement webElement){
-        if(cl = true){
+        if(cl == true){
             checkBoxCheck(webElement);
         }
-        if (cl = false) {
-            checkBoxUnCheck();
+        if (cl == false) {
+            checkBoxUnCheck(webElement);
         }
     }
 

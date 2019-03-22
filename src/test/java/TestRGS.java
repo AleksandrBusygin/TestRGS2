@@ -15,8 +15,8 @@ public class TestRGS extends BaseTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "Австрия", "IVANOV IVAN" , "25.10.1994", true},
-                { "Италия", "PETROV PETR", "13.01.1987", false },
+                { "Австрия", "IVANOV IVAN" , "25.10.1994", false},
+                { "Италия", "PETROV PETR", "13.01.1987", false},
                 { "Германия", "PUTIN VOVA", "02.07.1992", true }});
     }
 
@@ -53,7 +53,7 @@ public class TestRGS extends BaseTest {
         isElementPresented(elementBirthDate);
         fillForm(date, elementBirthDate);
 
-        WebElement element4 = driver.findElement(By.xpath("//*[contains(text(), 'активный отдых или спорт')]/ancestor::div[@class=\"calc-vzr-toggle-risk-group\"]//div[@class=\"toggle off toggle-rgs\"]"));
+        WebElement element4 = driver.findElement(By.xpath("//div[contains(@data-bind,'activeRestOrSportsToggle')]/div[contains(@class, 'toggle-rgs')]"));
         scrollToElement(element4);
         activeRelax(sport,element4);
 
