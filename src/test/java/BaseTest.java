@@ -1,6 +1,5 @@
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -89,9 +88,7 @@ public class BaseTest {
         scrollToElement(element6);
 
         compareText(driver.findElement(By.xpath("//span/span[@class='text-bold']/parent::span")).getText(),"Многократные поездки в течение года");
-         //span[contains(text(),'Многократные поездки')]
         compareText(driver.findElement(By.xpath("//span/strong[@data-bind='text: Name']")).getText(),"Шенген");
-        //span/strong[@data-bind='text: Name'] //strong[contains(text(),'Шенген')]
         compareText(driver.findElement(By.xpath("//strong[@data-bind=\"text: LastName() + ' ' + FirstName()\"]")).getText(),"PUTIN VOVA");
         compareText(driver.findElement(By.xpath("//strong[@data-bind=\" text: BirthDay.repr('moscowRussianDate')\"]")).getText(),"02.07.1992");
         compareText(driver.findElement(By.xpath("//div[@style=\"visibility: visible; opacity: 1; display: block; transform: translateX(0px);\"]//child::small[@data-bind=\"text: ko.unwrap('undefined' === typeof info ? '' : info)\"]")).getText(),"(включая активный отдых)");
@@ -104,7 +101,7 @@ public class BaseTest {
             scrollToElement(element);
             element.click();
             element.clear();
-            Thread.sleep(3);
+            Thread.sleep(1000);
             element.sendKeys(text);
         }
     }

@@ -2,7 +2,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
@@ -15,7 +14,7 @@ public class TestRGS extends BaseTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "Австрия", "IVANOV IVAN" , "25.10.1994", false},
+                { "Австрия", "IVANOV IVAN", "25.10.1994", false},
                 { "Италия", "PETROV PETR", "13.01.1987", false},
                 { "Германия", "PUTIN VOVA", "02.07.1992", true }});
     }
